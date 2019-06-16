@@ -47,7 +47,7 @@
 \AtBeginSection[]
 {
   \begin{frame}<beamer>{Outline}
-    \tableofcontents[currentsubsection]
+    \tableofcontents[currentsection]
   \end{frame}
 }
 
@@ -86,49 +86,48 @@
   \end{itemize}
 \end{frame}
 
-\subsection{Container vs Máquina Virtual}
 \subsection{Qué es Docker?}
 
-\begin{frame}{Make Titles Informative.}
-
-  You can create overlays\dots
-  \begin{itemize}
-  \item using the \texttt{pause} command:
-    \begin{itemize}
-    \item
-      First item.
-      \pause
-    \item    
-      Second item.
-    \end{itemize}
-  \item
-    using overlay specifications:
-    \begin{itemize}
-    \item<3->
-      First item.
-    \item<4->
-      Second item.
-    \end{itemize}
-  \item
-    using the general \texttt{uncover} command:
-    \begin{itemize}
-      \uncover<5->{\item
-        First item.}
-      \uncover<6->{\item
-        Second item.}
-    \end{itemize}
-  \end{itemize}
+\begin{frame}{Qué es Docker?}
+	\hspace{1cm} Docker es un proyecto de código abierto que automatiza el despliegue de aplicaciones dentro de containers. \\
+	\vspace{0.5cm}
+	\hspace{1cm} Utiliza características de aislamiento de recursos del kernel Linux, como \texttt{cgroups} y espacios de nombres (\texttt{namespaces}) para permitir que containers independientes se ejecuten en una sola instancia de Linux, evitando el coste de iniciar y mantener máquinas virtuales.
 \end{frame}
 
+\subsection{Container vs Máquina Virtual}
 
-\subsection{Second Subsection}
+\begin{frame}{Container vs Máquina Virtual}
 
-\begin{frame}{Make Titles Informative.}
+	Maquina Virtual
+	\begin{itemize}
+	\item
+	Para aislar n procesos se necesitan n SO operativos virtualizados.
+	\item
+	Virtualizaciones controladas por \texttt{Hypervisor}.
+	\item 
+	Gran consumo de recursos.
+	\item
+	SO virtualizado puede contener bibliotecas innecesarias.
+	\end{itemize}		
+
+	Container
+	\begin{itemize}
+	\item
+	Cada container se ejecuta sobre un único Kernel.
+	\item
+	Ahorra recursos
+	\item
+	Containers controlados, en el caso de Docker, por \texttt{Docker Engine}.
+	\item
+	Cada containers contiene las dependencias minimas y necesarias
+	\end{itemize}
 \end{frame}
 
-\begin{frame}{Make Titles Informative.}
-\end{frame}
+\section{Volumes}
 
+\section{Conexion entre Containers}
+
+\section{Kubernetes}
 
 
 \section*{Summary}
