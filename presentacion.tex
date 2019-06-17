@@ -72,6 +72,12 @@
 
 \section{Introducción}
 
+\subsection{Aclaracion Preliminar}
+
+\begin{frame}{Aclaración}
+	A lo largo de esta presentación haremos referencia a características específicas a Docker, porque este es el software más popular en cuanto a manipulación de Containers.
+\end{frame}
+
 \subsection{Definición de Container?}
 
 \begin{frame}{Qué es un Container?}
@@ -123,7 +129,51 @@
 	\end{itemize}
 \end{frame}
 
+\section{Container Image}
+
+\subsection{Qué es una Imagen de Container?}
+
+\begin{frame}{Qué es una Imagen de Container?}
+ 	Básicamente un Container es la instancia de su Imagen.\\
+	En la imagen del Container se almacena la configuración del mismo.\\
+	En esta configuración se establece el proceso a ejecutar y sus dependencias necesarias, debiéndose especificar las versiones de las mismas. \\
+	Esta configuración se almacena en una estructura de árbol.\\
+	A partir de una Imagen se puede crear un Contenedor y viceversa, podemos crear y configurar un Contenedor manualmente y luego generar una Imagen.
+	
+\end{frame}
+
+\subsection{Que es un DockerFile?}
+\begin{frame}
+	Se denomina DockerFile al archivo en que se almacena la configuracion de una Imagen de Container en Docker.
+\end{frame}
+
 \section{Volumes}
+
+\subsection{Qué es un Volume?}
+
+\begin{frame}
+	El Volume el es mecanismo más común dentro de Docker para persistir información generada y usada por los Containers.
+\end{frame}
+
+\subsection{Volume vs Bind Mounts}
+
+\begin{frame}
+	Volume
+	\begin{itemize}
+		\item
+	\end{itemize}
+	Bind Mount
+	\begin{itemize}
+		\item
+		Consiste en montar un archivo o directorio perteneciente al host, dentro de un container. Este archivo se referencia por su path.
+		\item
+		Buen rendimiento.
+		\item
+		Crea dependencias por fuera del Container y del Docker Engine, que no es lo ideal.
+		\item
+		No puede utilizarse desde la consola de Docker.
+	\end{itemize}
+\end{frame}
 
 \section{Conexion entre Containers}
 
