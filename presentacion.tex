@@ -8,6 +8,7 @@
   \setbeamercovered{transparent}
 }
 
+\usepackage{multicol}
 
 \usepackage[spanish, english]{babel}
 % or whatever
@@ -46,8 +47,10 @@
 % the beginning of each subsection:
 \AtBeginSection[]
 {
-  \begin{frame}<beamer>{Outline}
-    \tableofcontents[currentsection]
+  \begin{frame}<beamer>{Seccion}
+     \begin{multicols*}{2}
+	    \tableofcontents[currentsection]
+     \end{multicols*}
   \end{frame}
 }
 
@@ -66,7 +69,10 @@
 
 \begin{frame}
   \frametitle{Índice}
-  \tableofcontents
+  \begin{multicols*}{2}
+	\tableofcontents
+  \end{multicols*}
+
   % You might wish to add the option [pausesections]
 \end{frame}
 
@@ -176,6 +182,38 @@
 \end{frame}
 
 \section{Conexion entre Containers}
+
+\subsection{Introducción}
+
+\begin{frame}{Introducción}
+	Como ya sabemos, la idea fundamental de los Containers, es aislar software. Sin embargo, en muchas aplicaciones es necesaria una forma de transmitir información entre Containers, para esto, se crean mecanismos de conexión entre Containers. \\Cabe aclarar que en las siguientes diapositivas se haga referencia a mecanicas específicas a Docker, al ser este el software de Containers en el que nos concentramos.
+\end{frame}
+
+\subsection{Cómo se conectan?}
+\begin{frame}{Como se conectan los Containers?}
+	En la comunicacion entre Containers lo que se hace básicamente es crear una red en la que se expone cada Container como un host. Esto implica que a cada container se le asigna su propia direccion IP y MAC, entre otros parametros.
+\end{frame}
+
+\subsection{Red Bridge}
+\begin{frame}{Redes: Bridge}
+Por defecto todos los containers se conectan a un bridge virtual de Ethernet, en \texttt{Docker} esta representado por la red \texttt{docker0}. Existen otros 2 tipos de redes por defecto en \texttt{Docker}, la red \texttt{host} y la red \texttt{none}
+\end{frame}
+
+\subsection{Red Host}
+
+\begin{frame}
+\hspace{1cm} La red \texttt{host} añade el Container a la pila de protocolos del Host en el que se ejecuta. Esto significa que no existe ningun tipo de aislamiento entre el Container y el Host, en cuanto a redes se refiere.\\
+
+\hspace{1cm} Esto implica una correspondencia entre los puertos del Container y el Host. \\
+
+\hspace{1cm} Por ejemplo, cualquier servicio ejecutándose en un puerto X del Container, es accesible desde el puerto X del Host. 
+\end{frame}
+
+\subsection{Red None}
+
+\begin{frame}
+	La red \texttt{none} agrega al Container a una pila de Protocolos específica a dicho Container. En este caso, el Container no tiene una interfaz de red.
+\end{frame}
 
 \section{Kubernetes}
 
