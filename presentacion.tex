@@ -47,11 +47,9 @@
 % the beginning of each subsection:
 \AtBeginSection[]
 {
-  \begin{frame}<beamer>{Seccion}
-     \begin{multicols*}{2}
-	    \tableofcontents[currentsection]
-     \end{multicols*}
-  \end{frame}
+    \begin{frame}[allowframebreaks]{Sección} 
+    \tableofcontents[currentsection, hideothersubsections] 
+    \end{frame} 
 }
 
 
@@ -67,11 +65,11 @@
   \titlepage
 \end{frame}
 
-\begin{frame}
+\begin{frame}[allowframebreaks]
   \frametitle{Índice}
-  \begin{multicols*}{2}
+  
 	\tableofcontents
-  \end{multicols*}
+ 
 
   % You might wish to add the option [pausesections]
 \end{frame}
