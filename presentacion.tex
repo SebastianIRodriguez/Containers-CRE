@@ -169,6 +169,7 @@
 \begin{frame}
 	Un Bind Mount monta una carpeta desde el sistema de archivos local directamente al container. \\
 	De esta forma el motor de Docker no puede afectarlo ni reconocerlo directamente. \\
+	\vspace{.3cm}
 	Ademas los cambios que se realicen a la carpeta desde el container no se van a ver reflejados en el sistema de archivos
 	del Host ya que los Bind Mount solo comparten los contenidos de una carpeta. \\
 \end{frame}
@@ -240,6 +241,7 @@ Por defecto todos los containers se conectan a un bridge virtual de Ethernet, en
 
 \begin{frame}{Que es Kubernetes?}
 	Kubernetes es una aplicacion que automatiza las tareas manuales relacionadas al despliegue y escabilidad de una aplicacion. \\
+	\vspace{.3cm}
 	A demas Kubernetes puede administrar multiples host balanceando los niveles de carga entre los hosts y los niveles de demanda
 	sobre los containers lanzados en estos. 
 \end{frame}
@@ -249,12 +251,15 @@ Por defecto todos los containers se conectan a un bridge virtual de Ethernet, en
 
 \begin{frame}{Como funciona Kubernetes?}
 	Para funcionar Kubernetes cuenta con una unidad minima llamada Pod. \\
+	\vspace{.2cm}
 	Un Pod es una abstraccion que permite incluir varios contenedores dentro del mismo elemento y administrar sus requerimientos. \\
+	\vspace{.2cm}
 	De esta forma, se generan conjuntos de containers autonomos que comparten un Namespace, espacio de IP, etc.
 \end{frame}
 
 \begin{frame}{Escabilidad y Confiabilidad}
 	Una de las características estrella de Kubernetes es su concepto de replicas. \\
+	\vspace{.3cm}
 	Precisamente a esto apunta la abstraccion de Containers en Pods; que luego se convertiran en multiples instancias o \texttt{replicas} de una misma aplicacion
 	o servicio. \\
 	La utilidad de las replicas esta en su aplicacion para Confiabilidad, Balance de Carga y Escalado.
@@ -264,7 +269,8 @@ Por defecto todos los containers se conectan a un bridge virtual de Ethernet, en
 \subsection{Confiabilidad}
 
 \begin{frame}{Confiabilidad}
-	Al tener varias replicas de una aplicacion o servicio, se garantiza el producto final con mayor seguridad, aun si uno o mas de las replicas falla.
+	Al tener varias replicas de una aplicacion o servicio, se garantiza el producto final con mayor seguridad, aun si uno o mas de las replicas falla. \\
+	\vspace{.3cm}
 	Esta es una características muy util en aplicaciones como cloud computing, que estan basadas en la teoria de que uno o mas componentes pueden fallar.
 \end{frame}
 
@@ -272,7 +278,8 @@ Por defecto todos los containers se conectan a un bridge virtual de Ethernet, en
 \subsection{Balance de Carga}
 
 \begin{frame}{Balance de Carga}
-	Al tener multiples replicas de un container podemos facilmente distribuir la carga de trabajo efectuada por los usuarios entre las distintas replicas.
+	Al tener multiples replicas de un container podemos facilmente distribuir la carga de trabajo efectuada por los usuarios entre las distintas replicas. \\
+	\vspace{.3cm}
 	Esta características es acompañada a la vez con la posibilidad de utilizar multiples hosts, haciendo asi un mejor uso del hardware disponible.
 \end{frame}
 
@@ -280,38 +287,9 @@ Por defecto todos los containers se conectan a un bridge virtual de Ethernet, en
 \subsection{Escalado}
 
 \begin{frame}{Escalado}
-	Cuando los niveles de carga se elevan demasiado para la cantidad de replicas existentes, Kubernetes te permite facilmente escalar la aplicacion
+	\hspace{.3cm}Cuando los niveles de carga se elevan demasiado para la cantidad de replicas existentes, Kubernetes permite facilmente escalar la aplicacion
 	añadiendo tantas replicas como se requieran para el trabajo.
 \end{frame}
-
-\section*{Summary}
-
-\begin{frame}{Summary}
-
-  % Keep the summary *very short*.
-  \begin{itemize}
-  \item
-    The \alert{first main message} of your talk in one or two lines.
-  \item
-    The \alert{second main message} of your talk in one or two lines.
-  \item
-    Perhaps a \alert{third message}, but not more than that.
-  \end{itemize}
-  
-  % The following outlook is optional.
-  \vskip0pt plus.5fill
-  \begin{itemize}
-  \item
-    Outlook
-    \begin{itemize}
-    \item
-      Something you haven't solved.
-    \item
-      Something else you haven't solved.
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
 
 \end{document}
 
