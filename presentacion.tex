@@ -144,29 +144,46 @@
 	En la imagen del Container se almacena la configuración del mismo.\\
 	En esta configuración se establece el proceso a ejecutar y sus dependencias necesarias, debiéndose especificar las versiones de las mismas. \\
 	Esta configuración se almacena en una estructura de árbol.\\
-	A partir de una Imagen se puede crear un Contenedor y viceversa, podemos crear y configurar un Contenedor manualmente y luego generar una Imagen.
-	
+	A partir de una Imagen se puede crear un Contenedor y viceversa, podemos crear y configurar un Contenedor manualmente y luego generar una Imagen. \\
 \end{frame}
 
 \subsection{Que es un DockerFile?}
-\begin{frame}
-	Se denomina DockerFile al archivo en que se almacena la configuracion de una Imagen de Container en Docker.
+\begin{frame}{Que es un DockerFile?}
+	Se denomina DockerFile al archivo en que se almacena la configuracion de una Imagen de Container en Docker. \\
+	Luego este archivo se construye en una imagen y se agrega a la lista de imagenes disponibles de Docker para luego poder instanciar un container. \\
 \end{frame}
 
-\section{Volumes}
+\section{Volumenes}
 
 \subsection{Qué es un Volume?}
 
 \begin{frame}
-	El Volume el es mecanismo más común dentro de Docker para persistir información generada y usada por los Containers.
+	Un volumen es una manera de perpetuar los cambios realizados tanto desde el lado del host como del container.\\
+	\vspace{.3cm}
+	Esto quiere decir que los cambios efectuados en un volumen desde el host se ven reflejados en la imagen del container
+	sin necesidad de volverla a crear y permitiendo al container modificar los archivos en un directorio de manera directa\\
 \end{frame}
 
-\subsection{Volume vs Bind Mounts}
+\subsection{Qué es un Bind Mount?}
+
+\begin{frame}
+	Un Bind Mount monta una carpeta desde el sistema de archivos local directamente al container. \\
+	De esta forma el motor de Docker no puede afectarlo ni reconocerlo directamente. \\
+	Ademas los cambios que se realicen a la carpeta desde el container no se van a ver reflejados en el sistema de archivos
+	del Host ya que los Bind Mount solo comparten los contenidos de una carpeta. \\
+\end{frame}
+
+\subsection{Volumenes vs Bind Mounts}
 
 \begin{frame}
 	Volume
 	\begin{itemize}
 		\item
+		Posibilidad del container de modificar directamente los contenidos del volumen.
+		\item
+		El volumen es creado dentro de una carpeta manejada por el Docker Engine.
+		\item
+		Accesible desde consola.
 	\end{itemize}
 	Bind Mount
 	\begin{itemize}
@@ -178,6 +195,8 @@
 		Crea dependencias por fuera del Container y del Docker Engine, que no es lo ideal.
 		\item
 		No puede utilizarse desde la consola de Docker.
+		\item
+		Rapido despliegue.
 	\end{itemize}
 \end{frame}
 
@@ -217,6 +236,53 @@ Por defecto todos los containers se conectan a un bridge virtual de Ethernet, en
 
 \section{Kubernetes}
 
+\subsection{Que es Kubernetes?}
+
+\begin{frame}{Que es Kubernetes?}
+	Kubernetes es una aplicacion que automatiza las tareas manuales relacionadas al despliegue y escabilidad de una aplicacion. \\
+	A demas Kubernetes puede administrar multiples host balanceando los niveles de carga entre los hosts y los niveles de demanda
+	sobre los containers lanzados en estos. 
+\end{frame}
+
+
+\subsection{Como funciona Kubernetes?}
+
+\begin{frame}{Como funciona Kubernetes?}
+	Para funcionar Kubernetes cuenta con una unidad minima llamada Pod. \\
+	Un Pod es una abstraccion que permite incluir varios contenedores dentro del mismo elemento y administrar sus requerimientos. \\
+	De esta forma, se generan conjuntos de containers autonomos que comparten un Namespace, espacio de IP, etc.
+\end{frame}
+
+\begin{frame}{Escabilidad y Confiabilidad}
+	Una de las características estrella de Kubernetes es su concepto de replicas. \\
+	Precisamente a esto apunta la abstraccion de Containers en Pods; que luego se convertiran en multiples instancias o \texttt{replicas} de una misma aplicacion
+	o servicio. \\
+	La utilidad de las replicas esta en su aplicacion para Confiabilidad, Balance de Carga y Escalado.
+\end{frame}
+
+
+\subsection{Confiabilidad}
+
+\begin{frame}{Confiabilidad}
+	Al tener varias replicas de una aplicacion o servicio, se garantiza el producto final con mayor seguridad, aun si uno o mas de las replicas falla.
+	Esta es una características muy util en aplicaciones como cloud computing, que estan basadas en la teoria de que uno o mas componentes pueden fallar.
+\end{frame}
+
+
+\subsection{Balance de Carga}
+
+\begin{frame}{Balance de Carga}
+	Al tener multiples replicas de un container podemos facilmente distribuir la carga de trabajo efectuada por los usuarios entre las distintas replicas.
+	Esta características es acompañada a la vez con la posibilidad de utilizar multiples hosts, haciendo asi un mejor uso del hardware disponible.
+\end{frame}
+
+
+\subsection{Escalado}
+
+\begin{frame}{Escalado}
+	Cuando los niveles de carga se elevan demasiado para la cantidad de replicas existentes, Kubernetes te permite facilmente escalar la aplicacion
+	añadiendo tantas replicas como se requieran para el trabajo.
+\end{frame}
 
 \section*{Summary}
 
