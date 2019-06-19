@@ -86,4 +86,20 @@ Luego, solo nos queda compilar la imagen para luego ejecutarla.. Para eso vamos 
 
 En este comando se utilizar el gestor de imagenes para construir una nueva imagen a la cual le otorgamos un nombre personalizado con la opcion --tag y le decimos que incluya el directorio actual con el .
 
+Despues de correrlo vemos que nos imprime todos los pasos que va siguiendo y por ultimo nos indica que la imagen se construyo correctamente.
+
+Ahora podemos correr un 'docker container run' igual que antes usando la tag que le asignamos previamente a la imagen para correr este container personalizado.. Corremos:
+	docker container run \
+	--detach \
+	--publish 80:80 \
+	--name mi_container \
+	mi_app
+
+Las novedades de este comando incluyen la opcion --publish que como se habia comentado antes, va a servir para vincular puertos reales de nuestra computadora con puertos publicados del contenedor y asi realizar pedidos al contenedor desde fuera.
+
+Ahora podemos ver que nuestro contenedor esta funcionando escribiendo la direccion 'localhost:80' en un navegador y ver que se desplego tanto la pagina como el servidor.
+
+Ahora que vimos que esta funcionando vamos a eliminarlo para pasar a una version mas dinamica del container.. Vamos a correr:
+	docker container rm --force mi_app
+
 
