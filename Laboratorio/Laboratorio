@@ -102,4 +102,21 @@ Ahora podemos ver que nuestro contenedor esta funcionando escribiendo la direcci
 Ahora que vimos que esta funcionando vamos a eliminarlo para pasar a una version mas dinamica del container.. Vamos a correr:
 	docker container rm --force mi_app
 
+Modificar un contenedor que esta corriendo:
+
+Al desarrollar, no es conveniente parar y volver a iniciar el contenedor cada vez que se realizan cambios. En eso esta centrado el siguiente ejercicio, donde vamos a montar el directorio con el codigo fuente dentro del contenedor. De esta forma, cualquier cambio efectuado en el directorio de nuestra computadora se va a reflejar directamente sobre el container, cambiando nuestra aplicacion automaticamente.
+
+Para eso vamos a utilizar una 'bind mount' y para correr nuestro contenedor incluyendo esta opcion vamos a incluir la bandera --mount all comando container run de antes:
+	docker container run \
+	--detach \
+	--publish 80:80 \
+	--name mi_container \
+	--mount type=bind,source="$(pwd)",target=/usr/share/nginx/html \
+	mi_app
+
+La bandera mount incluye varias variables que indican:
+	- type le indica el tipo de montura que va a utilizar; en este caso una bind mount
+	- source le indica que carpeta quiere montar
+	- target indica donde va a montar la carpeta, con una direccion dentro del container
+
 
