@@ -21,7 +21,5 @@ Plantea actividades como:
 * Clonar desde GitHub y correr una aplicacion
 * Namespaces
 * Ejecutar comando desde Pod (ping)
-* Escalado de aplicacion
 * Exposicion de servicios y Containers
-* Creacion y configuracion de demonios
-* Balanceo de Carga
+* Escalado de aplicacion (opcional)
