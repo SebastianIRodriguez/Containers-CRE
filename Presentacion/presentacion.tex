@@ -17,6 +17,8 @@
 
 \usepackage{graphicx}
 
+\usepackage{hyperref}
+
 \usepackage{times}
 \usepackage[T1]{fontenc}
 % Or whatever. Note that the encoding and the font should match. If T1
@@ -135,6 +137,10 @@
 	\end{itemize}
 \end{frame}
 
+\begin{frame}
+	\includegraphics[width=11cm, height=5.5cm]{containers-vs-virtual-machines}
+\end{frame}
+
 \section{Container Image}
 
 \subsection{Qué es una Imagen de Container?}
@@ -202,7 +208,7 @@
 \end{frame}
 
 \begin{frame}
-	
+	\includegraphics[width=11cm, height=5.5cm]{volume}
 \end{frame}
 
 \section{Conexion entre Containers}
@@ -293,6 +299,24 @@ Por defecto todos los containers se conectan a un bridge virtual de Ethernet, en
 \begin{frame}{Escalado}
 	\hspace{.3cm}Cuando los niveles de carga se elevan demasiado para la cantidad de replicas existentes, Kubernetes permite facilmente escalar la aplicacion
 	añadiendo tantas replicas como se requieran para el trabajo.
+\end{frame}
+
+\begin{frame}
+	Fuentes:
+	\begin{itemize}
+	\item
+	\url{https://www.docker.com/}
+	\item
+	\url{https://kubernetes.io/es/}
+	\item
+	\url{https://www.youtube.com/watch?v=iSkkHdGw-C0}
+	\item
+	\url{https://www.youtube.com/watch?v=TvnZTi_gaNc}
+	\item
+	\url{https://www.youtube.com/watch?v=EnJ7qX9fkcU}
+	\item
+	\url{https://www.infoworld.com/article/3204171/what-is-docker-docker-containers-explained.html}
+	\end{itemize}
 \end{frame}
 
 \end{document}
