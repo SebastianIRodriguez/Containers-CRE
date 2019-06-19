@@ -22,7 +22,7 @@ Para este ejemplo vamos a correr una sesion de bash desde un container levantado
 Vamos a correr 'docker container run --interactive --tty --rm ubuntu bash'. 
 
 Este comando utiliza los parametros 'interactive', 'tty' y 'rm'. Estos parametros en orden son:
-    - Interactive relaciona el input producido desde el teclado del host con la entrada del container para la sesion de bash
+    - Interactive relaciona el input producido desde el teclado del host con la entrada del container para la sesion de bashdocker classroom
     - Tty muestra, como estamos acostumbrados, el usuario actual tanto como el directorio haciendolo mas parecido aun a una terminal corriente
     - Rm elimina el container luego de terminar la sesion. De esta forma no se vera mas al correr 'docker container ls --all'
 
@@ -35,4 +35,55 @@ Este ultimo ejemplo es especialmente util ya que de esta manera podemos ingresar
 
 Correr un contenedor en background:
 
-Esta va a ser la manera en que vamos a correr la 
+Esta va a ser la manera en que vamos a correr la mayoria de los containers.
+
+Vamos a correr un container con MySQL para luego explicar las opciones utilizadas: 
+	docker container run \
+	--detach \
+	--name mydb \
+	-e MYSQL_ROOT_PASSWORD=1234 \
+	mysql:latest
+
+En el comando anterior, ademas de añadir una etiqueta a la imagen que queriamos correr (mysql:latest, que nos trae la ultima version de MySQL), utilizamos opciones nuevas, que son:
+ 	- 'detach', pone a correr el servidor en background por lo tanto no se conseguira ningun retorno de simplemente ejecutarlo, sino que deberemos acceder de alguna forma a este para utilizarlo.
+	- 'name' le asigna un nombre personalizado al contenedor. Hasta ahora los nombres eran asignados aleatoriamente.
+	- 'e' configura la variable que contiene la contraseña de la base de datos.
+
+Podemos ver que en la ultima linea nos devuelve una combinacion de numeros y letras que corresponde al hash del container, pero aparte de eso, no imprime nada.
+
+Para ver que esta funcionando podemos correr un comando 'docker container ls'. Lo siguiente es correr algun comando sobre este contenedor:
+	docker exec -it mydb \
+	mysql --user=root --password=$MYSQL_ROOT_PASSWORD --version
+
+En este comando vemos que se usa exec en vez de container, y lo que esto indica es que exec va a correr el comando que se le pase sobre un servidor que ya esta activo (a diferencia de run que levanta el container a la vez). 
+
+Este comando nos va a mostrar la version de MySQL y va a concluir, pero aun asi no va a matar el container. 
+
+Podriamos probar hacer de otra manera esto corriendo primero una consola desde el contenedor y luego ejecutando el mismo comando de antes. Para eso usamos:
+	docker exec -it mydb sh
+
+Ahora estamos en una consola dentro del contenedor, por lo cual podemos correr:
+	mysql --user=root --password=$MYSQL_ROOT_PASSWORD --version
+
+Y vemos que da el mismo resultado.. Por ultimo para cerrar la sesion de consola corremos: exit
+
+
+Construir una imagen y correr un container personalizado:
+
+En esta actividad vamos a construir una imagen de Docker usando un Dockerfile (que no es mas que un archivo de configuracion parecido a composer) y luego compilar esta imagen para levantar un container que contenga esta imagen. 
+
+Para eso vamos a entrar en la carpeta de proyecto1 para ver el Dockerfile que armamos como ejemplo para esta actividad..
+
+Al ver el Dockerfile, podemos encontrar:
+	- FROM: especifica la imagen base que vamos a utilizar para el contenedor, que puede ser desde un MySQLServer hasta una instancia de linux en la que querramos correr comandos.
+	- COPY: que va a copiar los archivos presentes en el directorio dentro del container para asi utilizarlos durante la ejecucion de tareas.
+	Copy espera primero la direccion de un archivo presente en la computadora y luego la direccion donde va a copiarlo dentro del container.
+	- EXPOSE: documenta los puertos que la aplicacion va a necesitar. Mas adelante vamos a ver de que manera se pueden vincular estos puertos a puertos reales de nuestra computadora.
+	- CMD especifica que comando correr cuando el contenedor se levanta desde la imagen. Esta opcion se utilizar para configurar el contenedor antes de ingresar en el.
+
+Luego, solo nos queda compilar la imagen para luego ejecutarla.. Para eso vamos a correr el comando:
+	docker image build --tag mi_app .
+
+En este comando se utilizar el gestor de imagenes para construir una nueva imagen a la cual le otorgamos un nombre personalizado con la opcion --tag y le decimos que incluya el directorio actual con el .
+
+
