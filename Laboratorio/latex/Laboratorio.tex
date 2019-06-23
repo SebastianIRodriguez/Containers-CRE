@@ -1,0 +1,205 @@
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[spanish, english]{babel}
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx}
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\title{Laboratorio de Containers}
+\author{Ferreyra, Martinez Castro, S. Rodríguez}
+\date{Junio, 2019} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\section{Laboratorio de Docker}
+
+Esta es una primera aproximacion a docker donde primero crearemos un container individual desde una imagen bajada desde el servidor de docker, oportunamente llamado DockerHub, para luego crear nuestro propia imagen con el codigo provisto y crear un container con este.
+
+\subsection{Levantar un container para ejecutar una tarea}
+
+Vamos a correr el comando ls desde un container con alpine que es una distribucion de linux para ver los contenidos de la raiz en el container.
+
+Para eso vamos a correr 'docker container run alpine ls'.
+
+Ese ultimo comando contiene varias cosas. 'docker' es el comando principal que se escribe para pasarle instrucciones a docker. Una de esas instrucciones es 'container' que permite administrar los containers y dentro de esa instruccion podemos especificar una subinstruccion para administrarlos que es 'run'.
+
+'run' basicamente corre una instruccion en un nuevo container. De esta forma 'run' simultaneamente crea un nuevo contenedor con la imagen que le pasamos como parametro 'alpine' y corre una instruccion que le pasamos como segundo parametro, en este caso 'ls'.
+
+
+Luego de correr este comando vamos a ver que docker bajo la imagen oficial desde la pagina y que creo el container para por ultimo correr el comando ls y mostrar la estructura del directorio en la raiz del container.
+
+Podemos ver corriendo 'docker container ls --all' que nuestro container sigue vivo y con un estado que nos indica que ya no se esta utilizando. Ademas, podemos ver que nuestro  container tiene un id y una imagen asociados; en este caso la imagen es alpine.
+
+\subsection{Correr un container interactivo de Ubuntu}
+
+Para este ejemplo vamos a correr una sesion de bash desde un container levantado con una imagen de ubuntu. Para eso vamos a utilizar nuevamente el comando 'run' del ejemplo anterior con un par de parametros extras.
+
+Vamos a correr 'docker container run --interactive --tty --rm ubuntu bash'. 
+
+Este comando utiliza los parametros 'interactive', 'tty' y 'rm'. Estos parametros en orden son:
+    - Interactive relaciona el input producido desde el teclado del host con la entrada del container para la sesion de bashdocker classroom
+    - Tty muestra, como estamos acostumbrados, el usuario actual tanto como el directorio haciendolo mas parecido aun a una terminal corriente
+    - Rm elimina el container luego de terminar la sesion. De esta forma no se vera mas al correr 'docker container ls --all'
+
+Luego de eso podemos correr un par de comandos sobre el nuevo container que instanciamos:
+    - 'ls /' nos mostrara lo mismo que previamente hicimos para alpine
+    - 'ps aux' nos muestra todos los procesos corriendo actualmente en el contenedor
+    - 'cat /etc/issue' nos va a mostrar la distribucion de linux sobre la que estamos
+
+Este ultimo ejemplo es especialmente util ya que de esta manera podemos ingresar a un contenedor, configurar todo el entorno para nuestra aplicacion, administrar las dependecias requeridas y testear la aplicacion; y una vez que tenemos el contenedor como queremos podemos generar una imagen desde este y de esta forma distribuir libremente la imagen para que puedan utilizar tu aplicacion y tener el mismo container.
+
+\subsection{Correr un contenedor en background}
+
+Esta va a ser la manera en que vamos a correr la mayoria de los containers.
+
+Vamos a correr un container con MySQL para luego explicar las opciones utilizadas:\\
+	
+		\texttt{docker container run} \textbackslash \\
+		\texttt{--detach} \textbackslash \\
+		\texttt{--name mydb} \textbackslash \\
+		\texttt{-e MYSQL\_ROOT\_PASSWORD=1234} \textbackslash \\
+		\texttt{mysql:latest}
+	\\
+
+En el comando anterior, ademas de añadir una etiqueta a la imagen que queriamos correr (mysql:latest, que nos trae la ultima version de MySQL), utilizamos opciones nuevas, que son:
+ 	- 'detach', pone a correr el servidor en background por lo tanto no se conseguira ningun retorno de simplemente ejecutarlo, sino que deberemos acceder de alguna forma a este para utilizarlo.
+	- 'name' le asigna un nombre personalizado al contenedor. Hasta ahora los nombres eran asignados aleatoriamente.
+	- 'e' configura la variable que contiene la contraseña de la base de datos.
+
+Podemos ver que en la ultima linea nos devuelve una combinacion de numeros y letras que corresponde al hash del container, pero aparte de eso, no imprime nada.
+
+Para ver que esta funcionando podemos correr un comando 'docker container ls'. Lo siguiente es correr algun comando sobre este contenedor:\\ \\
+	\texttt{docker exec -it mydb} \textbackslash \\
+	\texttt{mysql --user=root --password=\$MYSQL\_ROOT\_PASSWORD --version}\\
+
+En este comando vemos que se usa exec en vez de container, y lo que esto indica es que exec va a correr el comando que se le pase sobre un servidor que ya esta activo (a diferencia de run que levanta el container a la vez). 
+
+Este comando nos va a mostrar la version de MySQL y va a concluir, pero aun asi no va a matar el container. 
+
+Podriamos probar hacer de otra manera esto corriendo primero una consola desde el contenedor y luego ejecutando el mismo comando de antes. Para eso usamos:\\ \\
+	\texttt{docker exec -it mydb sh} \\
+
+Ahora estamos en una consola dentro del contenedor, por lo cual podemos correr: \\ \\
+	\texttt{mysql --user=root --password=\$MYSQL\_ROOT\_PASSWORD --version} \\
+
+Y vemos que da el mismo resultado.. Por ultimo para cerrar la sesion de consola corremos: exit
+
+
+\subsection{Construir una imagen y correr un container personalizado}
+
+En esta actividad vamos a construir una imagen de Docker usando un Dockerfile (que no es mas que un archivo de configuracion parecido a composer) y luego compilar esta imagen para levantar un container que contenga esta imagen. 
+
+Para eso vamos a entrar en la carpeta de proyecto1 para ver el Dockerfile que armamos como ejemplo para esta actividad.
+
+Al ver el Dockerfile, podemos encontrar:
+\begin{itemize}
+	\item
+	FROM: especifica la imagen base que vamos a utilizar para el contenedor, que puede ser desde un MySQLServer hasta una instancia de linux en la que querramos correr comandos.
+
+	\item
+	COPY: que va a copiar los archivos presentes en el directorio dentro del container para asi utilizarlos durante la ejecucion de tareas.
+	Copy espera primero la direccion de un archivo presente en la computadora y luego la direccion donde va a copiarlo dentro del container.
+	
+	\item	
+	EXPOSE: documenta los puertos que la aplicacion va a necesitar. Mas adelante vamos a ver de que manera se pueden vincular estos puertos a puertos reales de nuestra computadora.
+	
+	\item
+	CMD especifica que comando correr cuando el contenedor se levanta desde la imagen. Esta opcion se utilizar para configurar el contenedor antes de ingresar en el.
+\end{itemize}
+
+
+Luego, solo nos queda compilar la imagen para luego ejecutarla.. Para eso vamos a correr el comando: \\ \\
+	\texttt{docker image build --tag mi\_app .} \\
+
+En este comando se utilizar el gestor de imagenes para construir una nueva imagen a la cual le otorgamos un nombre personalizado con la opcion --tag y le decimos que incluya el directorio actual con el .
+
+Despues de correrlo vemos que nos imprime todos los pasos que va siguiendo y por ultimo nos indica que la imagen se construyo correctamente.
+
+Ahora podemos correr un 'docker container run' igual que antes usando la tag que le asignamos previamente a la imagen para correr este container personalizado.. Corremos: \\ \\
+	\texttt{docker container run} \textbackslash \\
+	\texttt{--detach} \textbackslash \\
+	\texttt{--publish 80:80} \textbackslash \\
+	\texttt{--name mi\_container} \textbackslash \\
+	\texttt{mi\_app} \\ \\
+
+Las novedades de este comando incluyen la opcion --publish que como se habia comentado antes, va a servir para vincular puertos reales de nuestra computadora con puertos publicados del contenedor y asi realizar pedidos al contenedor desde fuera.
+
+Ahora podemos ver que nuestro contenedor esta funcionando escribiendo la direccion 'localhost:80' en un navegador y ver que se desplego tanto la pagina como el servidor.
+
+Ahora que vimos que esta funcionando vamos a eliminarlo para pasar a una version mas dinamica del container.. Vamos a correr:\\ \\
+	\texttt{docker container rm --force mi\_app} \\
+
+\subsection{Modificar un contenedor que esta en ejecución}
+
+Al desarrollar, no es conveniente parar y volver a iniciar el contenedor cada vez que se realizan cambios. En eso esta centrado el siguiente ejercicio, donde vamos a montar el directorio con el codigo fuente dentro del contenedor. De esta forma, cualquier cambio efectuado en el directorio de nuestra computadora se va a reflejar directamente sobre el container, cambiando nuestra aplicacion automaticamente.
+
+Para eso vamos a utilizar una 'bind mount' y para correr nuestro contenedor incluyendo esta opcion vamos a incluir la bandera --mount all comando container run de antes: \\ \\
+	\texttt{docker container run} \textbackslash \\
+	\texttt{--detach} \textbackslash \\
+	\texttt{--publish 80:80} \textbackslash \\
+	\texttt{--name mi\_container} \textbackslash \\
+	\texttt{--mount type=bind,source=\"\$(pwd)\",target=/usr/share/nginx/html} \textbackslash \\
+	\texttt{mi\_app} \\ \\
+
+La bandera mount incluye varias variables que indican:
+\begin{itemize}
+	
+	\item
+	type le indica el tipo de montura que va a utilizar; en este caso una bind mount
+
+	\item	
+	source le indica que carpeta quiere montar
+	
+	\item	
+	target indica donde va a montar la carpeta, con una direccion dentro del container
+\end{itemize}
+
+
+
+\section{Laboratorio de Kubernetes}
+
+
+\end{document}
