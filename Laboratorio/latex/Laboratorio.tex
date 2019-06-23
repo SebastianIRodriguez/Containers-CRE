@@ -56,7 +56,7 @@
 
 \section{Laboratorio de Docker}
 
-Esta es una primera aproximacion a docker donde primero crearemos un container individual desde una imagen bajada desde el servidor de docker, oportunamente llamado DockerHub, para luego crear nuestro propia imagen con el codigo provisto y crear un container con este.
+Esta es una primera aproximación a docker donde primero crearemos un container individual desde una imagen bajada desde el servidor de docker, oportunamente llamado DockerHub, para luego crear nuestro propia imagen con el codigo provisto y crear un container con este.
 
 \subsection{Levantar un container para ejecutar una tarea}
 
@@ -75,26 +75,25 @@ Podemos ver corriendo 'docker container ls --all' que nuestro container sigue vi
 
 \subsection{Correr un container interactivo de Ubuntu}
 
-Para este ejemplo vamos a correr una sesion de bash desde un container levantado con una imagen de ubuntu. Para eso vamos a utilizar nuevamente el comando 'run' del ejemplo anterior con un par de parametros extras.
+Para este ejemplo vamos a correr una sesión de bash desde un container levantado con una imagen de ubuntu. Para eso vamos a utilizar nuevamente el comando 'run' del ejemplo anterior con un par de parámetros extras.
 
 Vamos a correr 'docker container run --interactive --tty --rm ubuntu bash'. 
 
-Este comando utiliza los parametros 'interactive', 'tty' y 'rm'. Estos parametros en orden son:
-    - Interactive relaciona el input producido desde el teclado del host con la entrada del container para la sesion de bashdocker classroom
+Este comando utiliza los parámetros 'interactive', 'tty' y 'rm'. Estos parámetros en orden son:
+    - Interactive relaciona el input producido desde el teclado del host con la entrada del container para la sesión de bashdocker classroom
     - Tty muestra, como estamos acostumbrados, el usuario actual tanto como el directorio haciendolo mas parecido aun a una terminal corriente
     - Rm elimina el container luego de terminar la sesion. De esta forma no se vera mas al correr 'docker container ls --all'
 
 Luego de eso podemos correr un par de comandos sobre el nuevo container que instanciamos:
     - 'ls /' nos mostrara lo mismo que previamente hicimos para alpine
     - 'ps aux' nos muestra todos los procesos corriendo actualmente en el contenedor
-    - 'cat /etc/issue' nos va a mostrar la distribucion de linux sobre la que estamos
+    - 'cat /etc/issue' nos va a mostrar la distribución de linux sobre la que estamos
 
 Este ultimo ejemplo es especialmente util ya que de esta manera podemos ingresar a un contenedor, configurar todo el entorno para nuestra aplicacion, administrar las dependecias requeridas y testear la aplicacion; y una vez que tenemos el contenedor como queremos podemos generar una imagen desde este y de esta forma distribuir libremente la imagen para que puedan utilizar tu aplicacion y tener el mismo container.
 
 \subsection{Correr un contenedor en background}
 
-Esta va a ser la manera en que vamos a correr la mayoria de los containers.
-
+Esta va a ser la manera en que vamos a correr la mayoría de los containers.\\
 Vamos a correr un container con MySQL para luego explicar las opciones utilizadas:\\
 	
 		\texttt{docker container run} \textbackslash \\
@@ -105,9 +104,17 @@ Vamos a correr un container con MySQL para luego explicar las opciones utilizada
 	\\
 
 En el comando anterior, ademas de añadir una etiqueta a la imagen que queriamos correr (mysql:latest, que nos trae la ultima version de MySQL), utilizamos opciones nuevas, que son:
- 	- 'detach', pone a correr el servidor en background por lo tanto no se conseguira ningun retorno de simplemente ejecutarlo, sino que deberemos acceder de alguna forma a este para utilizarlo.
-	- 'name' le asigna un nombre personalizado al contenedor. Hasta ahora los nombres eran asignados aleatoriamente.
-	- 'e' configura la variable que contiene la contraseña de la base de datos.
+\begin{itemize}
+	\item 	
+ 	'detach', pone a correr el servidor en background por lo tanto no se conseguira ningun retorno de simplemente ejecutarlo, sino que deberemos acceder de alguna forma a este para utilizarlo.
+ 	
+ 	\item
+	'name' le asigna un nombre personalizado al contenedor. Hasta ahora los nombres eran asignados aleatoriamente.
+	
+	\item
+	'e' configura la variable que contiene la contraseña de la base de datos.
+
+\end{itemize}
 
 Podemos ver que en la ultima linea nos devuelve una combinacion de numeros y letras que corresponde al hash del container, pero aparte de eso, no imprime nada.
 
@@ -152,9 +159,11 @@ Al ver el Dockerfile, podemos encontrar:
 
 
 Luego, solo nos queda compilar la imagen para luego ejecutarla.. Para eso vamos a correr el comando: \\ \\
-	\texttt{docker image build --tag mi\_app .} \\
+	\texttt{docker image build --tag mi\_app:1.0 .} \\
 
-En este comando se utilizar el gestor de imagenes para construir una nueva imagen a la cual le otorgamos un nombre personalizado con la opcion --tag y le decimos que incluya el directorio actual con el .
+En este comando se utiliza el gestor de imagenes para construir una nueva imagen a la cual le otorgamos un nombre personalizado con la opcion --tag y le decimos que incluya el directorio actual con el .
+
+Ademas al nombre de la imagen le agregamos un numero de version luego de los dos puntos para generar una version nueva mas adelante.
 
 Despues de correrlo vemos que nos imprime todos los pasos que va siguiendo y por ultimo nos indica que la imagen se construyo correctamente.
 
@@ -163,14 +172,14 @@ Ahora podemos correr un 'docker container run' igual que antes usando la tag que
 	\texttt{--detach} \textbackslash \\
 	\texttt{--publish 80:80} \textbackslash \\
 	\texttt{--name mi\_container} \textbackslash \\
-	\texttt{mi\_app} \\ \\
+	\texttt{mi\_app:1.0} \\ \\
 
 Las novedades de este comando incluyen la opcion --publish que como se habia comentado antes, va a servir para vincular puertos reales de nuestra computadora con puertos publicados del contenedor y asi realizar pedidos al contenedor desde fuera.
 
 Ahora podemos ver que nuestro contenedor esta funcionando escribiendo la direccion 'localhost:80' en un navegador y ver que se desplego tanto la pagina como el servidor.
 
 Ahora que vimos que esta funcionando vamos a eliminarlo para pasar a una version mas dinamica del container.. Vamos a correr:\\ \\
-	\texttt{docker container rm --force mi\_app} \\
+	\texttt{docker container rm --force mi\_app:1.0} \\
 
 \subsection{Modificar un contenedor que esta en ejecución}
 
@@ -182,7 +191,7 @@ Para eso vamos a utilizar una 'bind mount' y para correr nuestro contenedor incl
 	\texttt{--publish 80:80} \textbackslash \\
 	\texttt{--name mi\_container} \textbackslash \\
 	\texttt{--mount type=bind,source=\"\$(pwd)\",target=/usr/share/nginx/html} \textbackslash \\
-	\texttt{mi\_app} \\ \\
+	\texttt{mi\_app:1.0} \\ \\
 
 La bandera mount incluye varias variables que indican:
 \begin{itemize}
@@ -196,6 +205,64 @@ La bandera mount incluye varias variables que indican:
 	\item	
 	target indica donde va a montar la carpeta, con una direccion dentro del container
 \end{itemize}
+
+Al establecer un bind mount ahora podemos cambiar el contenido de nuestro archivo index.html y ver los cambios reflejados en la pagina, accediendo nuevamente a la direccion en la que el servidor esta corriendo.
+
+Para hacer esta parte mas veloz ya se provee un archivo index-new.html con un cambio de color para la pagina el cual vamos a copiar con el nombre index.html; reescribiendolo para ver los cambios en la pagina.
+
+Vamos a correr: \\ \\
+	\texttt{cp index-new.html index.html} \\
+
+Y ahora si vamos nuevamente a la direccion del localhost junto con el puerto del container, o recargamos la pagina en caso de que no la hayamos cerrado veremos los cambios.
+
+Ahora que hemos probado las caracteristicas de los bind mount podemos probar a correr nuevamente el container sin el bind mount para ver si se mantienen los cambios.
+
+Vamos a ejecutar los siguientes comandos: \\ \\
+	\texttt{docker rm --force mi\_container} \\ \\
+	\texttt{docker container run } \textbackslash \\
+	\texttt{--detach } \textbackslash \\
+	\texttt{--publish 80:80 } \textbackslash \\
+	\texttt{--name mi\_container } \textbackslash \\
+	\texttt{mi\_app:1.0} \\ \\
+
+Y ahora si probamos a recargar la pagina veremos que esta devuelta en su estado original. Esto es devido a que los bind mount no afectan a la imagen en si sino al contenido del container y cada vez que se genere un nuevo container con la imagen nuestra va a tener el aspecto original que le otorgamos.
+
+Nuevamente, vamos a detener el container para el siguiente paso: \\ \\
+	\texttt{docker rm --force mi\_container} \\ \\
+
+\subsection{Actualizar la imagen de docker}
+
+Para hacer persistentes los cambios efectuados localmente en una imagen tendremos que generar una nueva version de la imagen.
+
+Para eso podemos reutilizar el Dockerfile con el que construimos la version anterior, la unica diferencia es que ahora va a copiar el index.html cambiado.
+
+Vamos a correr: \\ \\
+	\texttt{docker image build --tag mi\_app:2.0 .} \\ \\
+
+Y ya tenemos nuestra nueva version de la imagen. Podemos revisar todas las imagenes en el sistema hasta ahora corriendo: \\ \\
+	\texttt{docker image ls} \\ \\
+
+Ahora podemos probar la nueva version de nuestra aplicacion con un comando anterior: \\ \\
+	\texttt{docker container run}  \textbackslash \\
+	\texttt{--detach}  \textbackslash \\
+	\texttt{--publish 80:80} \textbackslash \\
+	\texttt{--name mi\_acontainer}  \textbackslash \\
+	\texttt{mi\_app:2.0} \\ \\
+
+Y recargando la pagina podremos ver la nueva version de nuestra pagina corriendo desde el container sin bind mounts. 
+
+Ademas, podemos poner en simultaneo la otra version de la pagina corriendo, teniendo como precaucion no seleccionar el mismo puerto para los dos containers.
+
+Vamos a correr: \\ \\
+	\texttt{docker container run}  \textbackslash \\
+	\texttt{--detach}  \textbackslash \\
+	\texttt{--publish 8080:80}  \textbackslash \\
+	\texttt{--name mi\_container\_antiguo}  \textbackslash \\
+	\texttt{mi\_app:1.0} \\ \\
+
+Ademas de asignar el puerto 8080 de nuestra computadora para acceder, hay que asignarle un nombre distinto a nuestro nuevo container para que docker los pueda diferenciar.
+
+Ahora accediendo a localhost:8080 podemos ver la version antigua de nuestra aplicacion.
 
 
 
