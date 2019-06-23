@@ -82,9 +82,11 @@ Al ver el Dockerfile, podemos encontrar:
 	- CMD especifica que comando correr cuando el contenedor se levanta desde la imagen. Esta opcion se utilizar para configurar el contenedor antes de ingresar en el.
 
 Luego, solo nos queda compilar la imagen para luego ejecutarla.. Para eso vamos a correr el comando:
-	docker image build --tag mi_app .
+	docker image build --tag mi_app:1.0 .
 
 En este comando se utilizar el gestor de imagenes para construir una nueva imagen a la cual le otorgamos un nombre personalizado con la opcion --tag y le decimos que incluya el directorio actual con el .
+
+Ademas al nombre de la imagen le agregamos un numero de version luego de los dos puntos para generar una version nueva mas adelante.
 
 Despues de correrlo vemos que nos imprime todos los pasos que va siguiendo y por ultimo nos indica que la imagen se construyo correctamente.
 
@@ -93,14 +95,14 @@ Ahora podemos correr un 'docker container run' igual que antes usando la tag que
 	--detach \
 	--publish 80:80 \
 	--name mi_container \
-	mi_app
+	mi_app:1.0
 
 Las novedades de este comando incluyen la opcion --publish que como se habia comentado antes, va a servir para vincular puertos reales de nuestra computadora con puertos publicados del contenedor y asi realizar pedidos al contenedor desde fuera.
 
 Ahora podemos ver que nuestro contenedor esta funcionando escribiendo la direccion 'localhost:80' en un navegador y ver que se desplego tanto la pagina como el servidor.
 
 Ahora que vimos que esta funcionando vamos a eliminarlo para pasar a una version mas dinamica del container.. Vamos a correr:
-	docker container rm --force mi_app
+	docker container rm --force mi_app:1.0
 
 Modificar un contenedor que esta corriendo:
 
@@ -112,11 +114,70 @@ Para eso vamos a utilizar una 'bind mount' y para correr nuestro contenedor incl
 	--publish 80:80 \
 	--name mi_container \
 	--mount type=bind,source="$(pwd)",target=/usr/share/nginx/html \
-	mi_app
+	mi_app:1.0
 
 La bandera mount incluye varias variables que indican:
 	- type le indica el tipo de montura que va a utilizar; en este caso una bind mount
 	- source le indica que carpeta quiere montar
 	- target indica donde va a montar la carpeta, con una direccion dentro del container
+
+Al establecer un bind mount ahora podemos cambiar el contenido de nuestro archivo index.html y ver los cambios reflejados en la pagina, accediendo nuevamente a la direccion en la que el servidor esta corriendo.
+
+Para hacer esta parte mas veloz ya se provee un archivo index-new.html con un cambio de color para la pagina el cual vamos a copiar con el nombre index.html; reescribiendolo para ver los cambios en la pagina.
+
+Vamos a correr:
+	cp index-new.html index.html
+
+Y ahora si vamos nuevamente a la direccion del localhost junto con el puerto del container, o recargamos la pagina en caso de que no la hayamos cerrado veremos los cambios.
+
+Ahora que hemos probado las caracteristicas de los bind mount podemos probar a correr nuevamente el container sin el bind mount para ver si se mantienen los cambios.
+
+Vamos a ejecutar los siguientes comandos:
+	docker rm --force mi_container
+
+	docker container run \
+	--detach \
+	--publish 80:80 \
+	--name mi_container \
+	mi_app:1.0:1.0
+
+Y ahora si probamos a recargar la pagina veremos que esta devuelta en su estado original. Esto es devido a que los bind mount no afectan a la imagen en si sino al contenido del container y cada vez que se genere un nuevo container con la imagen nuestra va a tener el aspecto original que le otorgamos.
+
+Nuevamente, vamos a detener el container para el siguiente paso:
+	docker rm --force mi_container
+
+Actualizar la imagen de docker:
+
+Para hacer persistentes los cambios efectuados localmente en una imagen tendremos que generar una nueva version de la imagen.
+
+Para eso podemos reutilizar el Dockerfile con el que construimos la version anterior, la unica diferencia es que ahora va a copiar el index.html cambiado.
+
+Vamos a correr:
+	docker image build --tag mi_app:2.0 .
+
+Y ya tenemos nuestra nueva version de la imagen. Podemos revisar todas las imagenes en el sistema hasta ahora corriendo:
+	docker image ls
+
+Ahora podemos probar la nueva version de nuestra aplicacion con un comando anterior:
+	docker container run \
+	--detach \
+	--publish 80:80 \
+	--name mi_acontainer \
+	mi_app:2.0
+
+Y recargando la pagina podremos ver la nueva version de nuestra pagina corriendo desde el container sin bind mounts. 
+
+Ademas, podemos poner en simultaneo la otra version de la pagina corriendo, teniendo como precaucion no seleccionar el mismo puerto para los dos containers.
+
+Vamos a correr:
+	docker container run \
+	--detach \
+	--publish 8080:80 \
+	--name mi_container_antiguo \
+	mi_app:1.0
+
+Ademas de asignar el puerto 8080 de nuestra computadora para acceder, hay que asignarle un nombre distinto a nuestro nuevo container para que docker los pueda diferenciar.
+
+Ahora accediendo a localhost:8080 podemos ver la version antigua de nuestra aplicacion.
 
 
