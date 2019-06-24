@@ -57,7 +57,6 @@
 \maketitle
 
 \section{Laboratorio de Docker}
-
 Esta es una primera aproximación a docker donde primero crearemos un container individual desde una imagen bajada desde el servidor de docker, oportunamente llamado DockerHub, para luego crear nuestro propia imagen con el codigo provisto y crear un container con este.
 
 \subsection{Levantar un container para ejecutar una tarea}
@@ -305,6 +304,8 @@ Ahora accediendo a localhost:8080 podemos ver la version antigua de nuestra apli
 
 \section{Laboratorio de Kubernetes}
 
+\textbf{Pagina con entorno de Kubernetes donde ejecutar comandos:\\\url{https://www.katacoda.com/courses/kubernetes/playground}} \\
+
 En kubernetes hay varios conceptos básicos como son los nodos y los pods de los que hablaremos aquí.
 
 Los nodos son computadoras o servidores que se unen a un cluster de nodos para repartirse las tareas de mantenimiento y ejecución de kubernetes.
@@ -409,7 +410,21 @@ Ahora vamos a comprobar el funcionamiento de nuestro replica set. Para eso vamos
 Entonces vemos nuestro pod con su nombre y lo usamos en el siguiente comando:\\ \\
     \texttt{kubectl delete pod PODNAME} \\
 
-Eso va a eliminar nuestro pod. Mientras lo elimina podemos darle a ctrl + c para seguir usando la consola y correr nuevamente 'kubectl get pods' para así ver que nuestro pod esta en esta el estado "terminating" o no está, y en su lugar se ha creado un nuevo pod para reemplazarlo.
+Eso va a eliminar nuestro pod. Mientras lo elimina podemos darle a ctrl + c para seguir usando la consola y correr nuevamente '\texttt{kubectl get pods}' para así ver que nuestro pod esta en esta el estado "terminating" o no está, y en su lugar se ha creado un nuevo pod para reemplazarlo.
+
+Por ultimo, vamos a comprobar las capacidades del deployment haciendo que escale la cantidad de replicas requeridas. Para eso vamos a correr:\\ \\
+    \texttt{kubectl scale deploy/pingpong --replicas 8} \\
+
+El comando se explica por si solo. La única consideración a tener en cuenta es que tenemos que usar el mismo nombre que nos tiro al correr '\texttt{kubectl get all}' y va a funcionar.
+
+Ahora si corremos nuevamente '\texttt{kubectl get pods}' vamos a ver que ahora el deployment genero de forma automática 8 pods.
+
+Por último podemos eliminar todo el deployment corriendo un:\\ \\
+    \texttt{kubectl delete deploy/pingpong} \\
+
+\subsection{Ejercicio}
+
+Como ejercicio final se propone correr la imagen creada en la parte de docker, desde kubernetes con el comando '\texttt{kubectl run}' que se explicó y escalarlo 3 veces.
 
 
 
