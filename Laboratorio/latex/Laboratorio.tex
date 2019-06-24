@@ -57,20 +57,23 @@
 \maketitle
 
 \section{Laboratorio de Docker}
+
+\textbf{Pagina con entorno de Docker donde ejecutar comandos:\\\url{https://labs.play-with-docker.com/\#}} \\
+
 Esta es una primera aproximación a docker donde primero crearemos un container individual desde una imagen bajada desde el servidor de docker, oportunamente llamado DockerHub, para luego crear nuestro propia imagen con el codigo provisto y crear un container con este.
 
 \subsection{Levantar un container para ejecutar una tarea}
 
 Vamos a correr el comando ls desde un container con alpine que es una distribucion de linux para ver los contenidos de la raiz en el container.
 
-Para eso vamos a correr:  \\ \\
-	\texttt{docker container run alpine ls} 
-	\\
+Para eso vamos a correr:
+\begin{center}
+\texttt{docker container run alpine ls .} \\
+\end{center}
 
+Ese ultimo comando contiene varias cosas. 'docker' es el comando principal que se escribe para pasarle instrucciones a docker. Una de esas instrucciones es 'container' que permite administrar los containers y dentro de esa instruccion podemos especificar una subinstruccion para administrarlos que es 'run'.
 
-Ese ultimo comando le indica al administrador de containers de docker que corra un nuevo container utilizando la imagen de una antigua distribucion de linux, llamada alpine.
-
-El ultimo parametro le indica al container que acaba de crear que ejecute el comando ls apenas arrancar y por ultimo devuelve los resultados por consola.
+'run' basicamente corre una instruccion en un nuevo container. De esta forma 'run' simultaneamente crea un nuevo contenedor con la imagen que le pasamos como parametro 'alpine' y corre una instruccion que le pasamos como segundo parametro, en este caso 'ls'.
 
 
 Luego de correr este comando vamos a ver que docker bajo la imagen oficial desde la pagina y que creo el container para por ultimo correr el comando ls y mostrar la estructura del directorio en la raiz del container.
@@ -81,9 +84,7 @@ Podemos ver corriendo 'docker container ls --all' que nuestro container sigue vi
 
 Para este ejemplo vamos a correr una sesión de bash desde un container levantado con una imagen de ubuntu. Para eso vamos a utilizar nuevamente el comando 'run' del ejemplo anterior con un par de parámetros extras.
 
-Vamos a correr: \\ \\
-	\texttt{docker container run --interactive --tty --rm ubuntu bash}
-	\\ 
+Vamos a correr 'docker container run --interactive --tty --rm ubuntu bash'. 
 
 Este comando utiliza los parámetros 'interactive', 'tty' y 'rm'. Estos parámetros en orden son:
 \begin{itemize}
@@ -92,7 +93,7 @@ Este comando utiliza los parámetros 'interactive', 'tty' y 'rm'. Estos parámet
     interactive relaciona el input producido desde el teclado del host con la entrada del container para la sesión de bashdocker classroom
     
     \item
-    tty muestra, como estamos acostumbrados, el usuario actual tanto como el directorio haciendolo mas parecido aun a una terminal corriente
+    ity muestra, como estamos acostumbrados, el usuario actual tanto como el directorio haciendolo mas parecido aun a una terminal corriente
     
     \item
     rm elimina el container luego de terminar la sesion. De esta forma no se vera mas al correr 'docker container ls --all'
@@ -358,7 +359,7 @@ Vamos a correr:
 Y entonces?.. 
 
 Podemos ver que hemos creado unos cuantos servicios nuevos con esos comandos corriendo:\\ \\
-    \texttt{kubectl get all} \\ \\
+    \texttt{kubectl get all} \\
 
 Ahi vamos a poder ver los siguientes servicios:
 \begin{itemize}
@@ -398,9 +399,9 @@ Ahora, todo esto no se entiende hasta que no lo vemos en acción, asi que para e
     \texttt{kubectl logs} \\ 
 
 Este comando nos va a mostrar el historial de consola de un pod especifico de un pod si lo pasamos por su nombre; o como alternativa podemos especificar un servicio como los que nos había impreso antes. Como ejemplo vamos a hacer para el deploy: \\ \\
-    \texttt{kubectl logs deploy/pingpong} \\ \\
+    \texttt{kubectl logs deploy/pingpong} \\
 
-Vemos que el nombre tiene que ser el formato que uso al imprimirlo en el paso anterior. Ademas vemos que ahora nos imprimió todos los resultados del ping a google como normalmente.
+Vemos que el nombre tiene que ser el formato que uso al imprimirlo en el paso anterior. Ademas vemos que ahora nos imprimió todos los resultados del ping a google como normalmente.\\
 
 \textbf{Nuestro container esta funcionando!!!}\\
 
