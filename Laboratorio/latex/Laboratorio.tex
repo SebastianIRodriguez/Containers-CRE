@@ -404,7 +404,21 @@ Ahora vamos a comprobar el funcionamiento de nuestro replica set. Para eso vamos
 Entonces vemos nuestro pod con su nombre y lo usamos en el siguiente comando:\\ \\
     \texttt{kubectl delete pod PODNAME} \\
 
-Eso va a eliminar nuestro pod. Mientras lo elimina podemos darle a ctrl + c para seguir usando la consola y correr nuevamente 'kubectl get pods' para así ver que nuestro pod esta en esta el estado "terminating" o no está, y en su lugar se ha creado un nuevo pod para reemplazarlo.
+Eso va a eliminar nuestro pod. Mientras lo elimina podemos darle a ctrl + c para seguir usando la consola y correr nuevamente '\texttt{kubectl get pods}' para así ver que nuestro pod esta en esta el estado "terminating" o no está, y en su lugar se ha creado un nuevo pod para reemplazarlo.
+
+Por ultimo, vamos a comprobar las capacidades del deployment haciendo que escale la cantidad de replicas requeridas. Para eso vamos a correr:\\ \\
+    \texttt{kubectl scale deploy/pingpong --replicas 8} \\
+
+El comando se explica por si solo. La única consideración a tener en cuenta es que tenemos que usar el mismo nombre que nos tiro al correr '\texttt{kubectl get all}' y va a funcionar.
+
+Ahora si corremos nuevamente '\texttt{kubectl get pods}' vamos a ver que ahora el deployment genero de forma automática 8 pods.
+
+Por último podemos eliminar todo el deployment corriendo un:\\ \\
+    \texttt{kubectl delete deploy/pingpong} \\
+
+\subsection{Ejercicio}
+
+Como ejercicio final se propone correr la imagen creada en la parte de docker, desde kubernetes con el comando '\texttt{kubectl run}' que se explicó y escalarlo 3 veces.
 
 
 
