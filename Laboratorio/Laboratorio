@@ -139,7 +139,7 @@ Vamos a ejecutar los siguientes comandos:
 	--detach \
 	--publish 80:80 \
 	--name mi_container \
-	mi_app:1.0:1.0
+	mi_app:1.0
 
 Y ahora si probamos a recargar la pagina veremos que esta devuelta en su estado original. Esto es devido a que los bind mount no afectan a la imagen en si sino al contenido del container y cada vez que se genere un nuevo container con la imagen nuestra va a tener el aspecto original que le otorgamos.
 

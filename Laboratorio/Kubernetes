@@ -1,0 +1,57 @@
+En kubernetes hay varios conceptos basicos como son los nodos y los pods de los que hablaremos aqui.
+
+Los nodos son computadoras o servidores que se unen a un cluster de nodos para repartirse las tareas de mantenimiento y ejecucion de kubernetes.
+
+Recordemos que una de las mejores caracteristicas de kubernetes es su capacidad de dividir el trabajo y balancearlo entre varias terminales para soportar cargas de trabajo extensivas.
+
+Dentro de los nodos podemos destacar uno especial, que es el nodo master..
+
+Este nodo tendra una coleccion de servicios como:
+    - Un servidor API, que nos permite conectarnos con el resto de nuestra aplicacion
+    - Servicios principales como el scheduler y el controller manager
+    - etcd que es la base de datos interna para toda la aplicacion
+
+Esto lo hace un nodo principal para el funcionamiento de nuestra aplicacion.
+
+Para ejecutar un nodo master luego de instalar correctamente kubernetes podemos correr:
+    kubeadm init
+
+Este comando va a mostrar un monton de actividad y en la ultima linea va a tirar algo como:
+    kubeadm join --token SOMETOKEN SOMEIPADDRESS --discovery-token-ca-cert-hash SOMESHAHASH
+
+Ahora tenemos un cluster corriendo en la red local y cualquier computadora de nuestra red puede conectarse con el script anterior que nos devolvio kubeadm init al cluster y dividirse tareas con el nodo master.
+
+Vamos a saltearnos el paso de añadir otro nodo al cluster y vamos directamente al ultimo paso que es configurar el networking para nuestro cluster. Para eso corremos:
+    kubectl apply -n kube-system -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 |tr -d '\n')"
+
+Y asi configuramos el cluster para ahora seguir con la generacion de algunos pods.. Los pods, que aun no se han explicado, son una abstraccion de los containers que nos facilita el trabajo con kubernetes al manejar los containers y la comunicacion entre ellos internamente. 
+
+Para empezar deberiamos introducir kubectl que es nuestra herramienta de comunicarnos con kubernetes a traves de la consola.
+
+Podemos correr un comando de prueba para ver todos los pods corriendo en el nodo master ahora mismo con:
+    kubectl -n kube-system get pods
+
+La opcion -n es para especificar un namespace; en este caso el namespace que kubernetes usa para declarar sus pods internos.
+
+Podemos ver entonces que nos muestra pods como etcd, kube-apiserver, kube-scheduler, etc. de los que ya hemos hablado.
+
+Corriendo nuestro primer container con Kubernetes:
+
+Podemos iniciar un pod muy sencillo con 'kubectl run' y especificarle una imagen tal como haciamos con docker. Asi, kubernetes va a descargar y utilizar configuraciones default para iniciar nuestra aplicacion corriendo un unico pod.
+
+Vamos a correr:
+    kubectl run pingpong --image alpine ping 8.8.8.8
+
+Y entonces?.. 
+
+Podemos ver que hemos creado unos cuantos servicios nuevos con esos comandos corriendo:
+    kubectl get all
+
+Ahi vamos a poder ver los siguientes servicios:
+    - deploy/pingpong (un deployment que tomo el nombre que especificamos justo luego del run)
+    - rs/pingpong (un replica set creado por el deployment)
+    - po/pingpong (un pod creado por el replica set)
+
+Ahora, hemos dado un paso adelante para poder ver la jerarquia existente dentro de kubernetes pero nos hemos adelantado tanto que tocamos conceptos desconocidos como deployment y los replica set.
+
+El concepto de replica set es un concepto diseñado para la utilidad de escalabilidad que nos ofrece 
