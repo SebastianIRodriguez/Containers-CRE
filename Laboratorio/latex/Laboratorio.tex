@@ -14,6 +14,8 @@
 
 \usepackage{graphicx}
 
+\usepackage{minted}
+
 % \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
 
 %%% PACKAGES
@@ -80,22 +82,36 @@ Para este ejemplo vamos a correr una sesión de bash desde un container levantad
 Vamos a correr 'docker container run --interactive --tty --rm ubuntu bash'. 
 
 Este comando utiliza los parámetros 'interactive', 'tty' y 'rm'. Estos parámetros en orden son:
-    - Interactive relaciona el input producido desde el teclado del host con la entrada del container para la sesión de bashdocker classroom
-    - Tty muestra, como estamos acostumbrados, el usuario actual tanto como el directorio haciendolo mas parecido aun a una terminal corriente
-    - Rm elimina el container luego de terminar la sesion. De esta forma no se vera mas al correr 'docker container ls --all'
+\begin{itemize}
+
+	\item
+    interactive relaciona el input producido desde el teclado del host con la entrada del container para la sesión de bashdocker classroom
+    
+    \item
+    ity muestra, como estamos acostumbrados, el usuario actual tanto como el directorio haciendolo mas parecido aun a una terminal corriente
+    
+    \item
+    rm elimina el container luego de terminar la sesion. De esta forma no se vera mas al correr 'docker container ls --all'
+\end{itemize}
 
 Luego de eso podemos correr un par de comandos sobre el nuevo container que instanciamos:
-    - 'ls /' nos mostrara lo mismo que previamente hicimos para alpine
-    - 'ps aux' nos muestra todos los procesos corriendo actualmente en el contenedor
-    - 'cat /etc/issue' nos va a mostrar la distribución de linux sobre la que estamos
+\begin{itemize}
+	\item    
+    'ls /' nos mostrara lo mismo que previamente hicimos para alpine
+    
+    \item  
+    'ps aux' nos muestra todos los procesos corriendo actualmente en el contenedor
+    
+    \item  
+    'cat /etc/issue' nos va a mostrar la distribución de linux sobre la que estamos
+\end{itemize}
 
 Este ultimo ejemplo es especialmente util ya que de esta manera podemos ingresar a un contenedor, configurar todo el entorno para nuestra aplicacion, administrar las dependecias requeridas y testear la aplicacion; y una vez que tenemos el contenedor como queremos podemos generar una imagen desde este y de esta forma distribuir libremente la imagen para que puedan utilizar tu aplicacion y tener el mismo container.
 
 \subsection{Correr un contenedor en background}
 
 Esta va a ser la manera en que vamos a correr la mayoría de los containers.\\
-Vamos a correr un container con MySQL para luego explicar las opciones utilizadas:\\
-	
+Vamos a correr un container con MySQL para luego explicar las opciones utilizadas:\\ \\
 		\texttt{docker container run} \textbackslash \\
 		\texttt{--detach} \textbackslash \\
 		\texttt{--name mydb} \textbackslash \\
@@ -178,7 +194,7 @@ Las novedades de este comando incluyen la opcion --publish que como se habia com
 
 Ahora podemos ver que nuestro contenedor esta funcionando escribiendo la direccion 'localhost:80' en un navegador y ver que se desplego tanto la pagina como el servidor.
 
-Ahora que vimos que esta funcionando vamos a eliminarlo para pasar a una version mas dinamica del container.. Vamos a correr:\\ \\
+Ahora que vimos que esta funcionando vamos a eliminarlo para pasar a una version mas dinamica del container. Vamos a correr:\\ \\
 	\texttt{docker container rm --force mi\_app:1.0} \\
 
 \subsection{Modificar un contenedor que esta en ejecución}
