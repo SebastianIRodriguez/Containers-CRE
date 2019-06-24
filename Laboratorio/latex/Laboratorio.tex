@@ -14,7 +14,7 @@
 
 \usepackage{graphicx}
 
-\usepackage{minted}
+\usepackage{hyperref}
 
 % \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
 
@@ -142,11 +142,15 @@ En este comando vemos que se usa exec en vez de container, y lo que esto indica 
 
 Este comando nos va a mostrar la version de MySQL y va a concluir, pero aun asi no va a matar el container. 
 
-Podriamos probar hacer de otra manera esto corriendo primero una consola desde el contenedor y luego ejecutando el mismo comando de antes. Para eso usamos:\\ \\
-	\texttt{docker exec -it mydb sh} \\
+Podriamos probar hacer de otra manera esto corriendo primero una consola desde el contenedor y luego ejecutando el mismo comando de antes. Para eso usamos:
+\begin{center}
+	\texttt{docker exec -it mydb sh}
+\end{center}
 
-Ahora estamos en una consola dentro del contenedor, por lo cual podemos correr: \\ \\
-	\texttt{mysql --user=root --password=\$MYSQL\_ROOT\_PASSWORD --version} \\
+Ahora estamos en una consola dentro del contenedor, por lo cual podemos correr:
+\begin{center}
+	\texttt{mysql --user=root --password=\$MYSQL\_ROOT\_PASSWORD --version}
+\end{center}
 
 Y vemos que da el mismo resultado.. Por ultimo para cerrar la sesion de consola corremos: exit
 
@@ -174,8 +178,10 @@ Al ver el Dockerfile, podemos encontrar:
 \end{itemize}
 
 
-Luego, solo nos queda compilar la imagen para luego ejecutarla.. Para eso vamos a correr el comando: \\ \\
-	\texttt{docker image build --tag mi\_app:1.0 .} \\
+Luego, solo nos queda compilar la imagen para luego ejecutarla.. Para eso vamos a correr el comando:
+\begin{center}
+	\texttt{docker image build --tag mi\_app:1.0 .}
+\end{center}
 
 En este comando se utiliza el gestor de imagenes para construir una nueva imagen a la cual le otorgamos un nombre personalizado con la opcion --tag y le decimos que incluya el directorio actual con el .
 
@@ -194,8 +200,10 @@ Las novedades de este comando incluyen la opcion --publish que como se habia com
 
 Ahora podemos ver que nuestro contenedor esta funcionando escribiendo la direccion 'localhost:80' en un navegador y ver que se desplego tanto la pagina como el servidor.
 
-Ahora que vimos que esta funcionando vamos a eliminarlo para pasar a una version mas dinamica del container. Vamos a correr:\\ \\
-	\texttt{docker container rm --force mi\_app:1.0} \\
+Ahora que vimos que esta funcionando vamos a eliminarlo para pasar a una version mas dinamica del container. Vamos a correr:
+\begin{center}
+	\texttt{docker container rm --force mi\_app:1.0}
+\end{center}
 
 \subsection{Modificar un contenedor que esta en ejecución}
 
@@ -226,8 +234,10 @@ Al establecer un bind mount ahora podemos cambiar el contenido de nuestro archiv
 
 Para hacer esta parte mas veloz ya se provee un archivo index-new.html con un cambio de color para la pagina el cual vamos a copiar con el nombre index.html; reescribiendolo para ver los cambios en la pagina.
 
-Vamos a correr: \\ \\
-	\texttt{cp index-new.html index.html} \\
+Vamos a correr:
+\begin{center}
+	\texttt{cp index-new.html index.html}
+\end{center}
 
 Y ahora si vamos nuevamente a la direccion del localhost junto con el puerto del container, o recargamos la pagina en caso de que no la hayamos cerrado veremos los cambios.
 
@@ -243,8 +253,10 @@ Vamos a ejecutar los siguientes comandos: \\ \\
 
 Y ahora si probamos a recargar la pagina veremos que esta devuelta en su estado original. Esto es devido a que los bind mount no afectan a la imagen en si sino al contenido del container y cada vez que se genere un nuevo container con la imagen nuestra va a tener el aspecto original que le otorgamos.
 
-Nuevamente, vamos a detener el container para el siguiente paso: \\ \\
-	\texttt{docker rm --force mi\_container} \\ \\
+Nuevamente, vamos a detener el container para el siguiente paso:
+\begin{center}
+	\texttt{docker rm --force mi\_container}
+\end{center}
 
 \subsection{Actualizar la imagen de docker}
 
@@ -252,11 +264,15 @@ Para hacer persistentes los cambios efectuados localmente en una imagen tendremo
 
 Para eso podemos reutilizar el Dockerfile con el que construimos la version anterior, la unica diferencia es que ahora va a copiar el index.html cambiado.
 
-Vamos a correr: \\ \\
-	\texttt{docker image build --tag mi\_app:2.0 .} \\ \\
+Vamos a correr:
+\begin{center}
+	\texttt{docker image build --tag mi\_app:2.0 .}
+\end{center}
 
-Y ya tenemos nuestra nueva version de la imagen. Podemos revisar todas las imagenes en el sistema hasta ahora corriendo: \\ \\
-	\texttt{docker image ls} \\ \\
+Y ya tenemos nuestra nueva version de la imagen. Podemos revisar todas las imagenes en el sistema hasta ahora corriendo:
+\begin{center}
+	\texttt{docker image ls}
+\end{center}
 
 Ahora podemos probar la nueva version de nuestra aplicacion con un comando anterior: \\ \\
 	\texttt{docker container run}  \textbackslash \\
@@ -283,6 +299,113 @@ Ahora accediendo a localhost:8080 podemos ver la version antigua de nuestra apli
 
 
 \section{Laboratorio de Kubernetes}
+
+En kubernetes hay varios conceptos básicos como son los nodos y los pods de los que hablaremos aquí.
+
+Los nodos son computadoras o servidores que se unen a un cluster de nodos para repartirse las tareas de mantenimiento y ejecución de kubernetes.
+
+Recordemos que una de las mejores características de kubernetes es su capacidad de dividir el trabajo y balancearlo entre varias terminales para soportar cargas de trabajo extensivas.
+
+Dentro de los nodos podemos destacar uno especial, que es el nodo master..
+
+Este nodo tendrá una colección de servicios como:
+    - Un servidor API, que nos permite conectarnos con el resto de nuestra aplicación
+    - Servicios principales como el scheduler y el controller manager
+    - etcd que es la base de datos interna para toda la aplicacion
+
+Esto lo hace un nodo principal para el funcionamiento de nuestra aplicación.
+
+Para ejecutar un nodo master luego de instalar correctamente kubernetes podemos correr:\\ \\
+    \texttt{kubeadm init} \\
+
+Este comando va a mostrar un monton de actividad y en la ultima linea va a tirar algo como:\\ \\
+
+    \texttt{kubeadm join --token SOMETOKEN SOMEIPADDRESS --discovery-token-ca-cert-hash SOMESHAHAHAHASH} \\ \\
+
+Ahora tenemos un cluster corriendo en la red local y cualquier computadora de nuestra red puede conectarse con el script anterior que nos devolvio \texttt{kubeadm init} al cluster y dividirse tareas con el nodo master.
+
+Vamos a saltearnos el paso de añadir otro nodo al cluster y vamos directamente al ultimo paso que es configurar el networking para nuestro cluster. Para eso corremos:\\ \\
+    \texttt{kubectl apply -n kube-system -f "https://cloud.weave.works/k8s/net?k8s-version=\$(kubectl version \textbar base64 \textbar  tr -d '\textbackslash n')"} \\ \\
+
+Y asi configuramos el cluster para ahora seguir con la generacion de algunos pods.. Los pods, que aun no se han explicado, son una abstraccion de los containers que nos facilita el trabajo con kubernetes al manejar los containers y la comunicacion entre ellos internamente. 
+
+Para empezar deberíamos introducir kubectl que es nuestra herramienta de comunicarnos con kubernetes a través de la consola.
+
+Podemos correr un comando de prueba para ver todos los pods corriendo en el nodo master ahora mismo con:
+\begin{center}
+    \texttt{kubectl -n kube-system get pods}
+\end{center}
+
+La opcion -n es para especificar un namespace; en este caso el namespace que kubernetes usa para declarar sus pods internos.
+
+Podemos ver entonces que nos muestra pods como etcd, kube-apiserver, kube-scheduler, etc. de los que ya hemos hablado.
+
+\subsection{Corriendo nuestro primer container con Kubernetes:}
+
+Podemos iniciar un pod muy sencillo con 'kubectl run' y especificarle una imagen tal como haciamos con docker. Asi, kubernetes va a descargar y utilizar configuraciones default para iniciar nuestra aplicacion corriendo un unico pod.
+
+Vamos a correr:
+\begin{center}
+    \texttt{kubectl run pingpong --image alpine ping 8.8.8.8}
+\end{center}
+
+Y entonces?.. 
+
+Podemos ver que hemos creado unos cuantos servicios nuevos con esos comandos corriendo:\\ \\
+    \texttt{kubectl get all} \\ \\
+
+Ahi vamos a poder ver los siguientes servicios:
+\begin{itemize}
+
+	\item
+	deploy/pingpong (un deployment que tomo el nombre que especificamos justo luego del run)
+    
+    \item
+    rs/pingpong (un replica set creado por el deployment)
+    
+    \item
+    po/pingpong (un pod creado por el replica set)
+\end{itemize}
+
+Ahora, hemos dado un paso adelante para poder ver la jerarquia existente dentro de kubernetes pero nos hemos adelantado tanto que tocamos conceptos desconocidos como deployment y los replica set.
+
+El concepto de replica set es un concepto diseñado para la utilidad de escalabilidad y confiabilidad que nos ofrece kubernetes. La idea de los replica set es mantener un numero minimo y deseado de pods identicos corriendo para asegurarnos que:
+\begin{itemize}
+    
+	\item    
+    En caso de que uno o mas pods fallen y desaparezcan, el controlador del replica set va a generar nuevas copias para remplazarlos.
+    
+	\item	
+	En el caso de que querramos escalar la aplicación para recibir mas consultas podemos especificar un mayor numero de replicas o configurarlo para que aumente automáticamente.
+\end{itemize}
+
+
+El concepto de deployment es el ultimo en la jerarquía de kubernetes y actúa orquestando los replica set y los pods con actualizaciones declarativas sobre estos.
+
+Una actualización declarativa es algo como 'podría usted mantener 4 replica set ahora mismo'. De esta forma el deployment puede guiar el estado actual de nuestro proyecto hasta el estado deseado de una manera controlada.
+
+Entonces al configurar nosotros nuestro deployment establecemos un estado deseado y el deployment va a hacer todo lo posible por satisfacer esto utilizando una combinacion de controladores.
+
+Volviendo a lo que íbamos, ahora creamos un container dentro de un pod adentro de muchas otras cosas y esencialmente este container le hizo un ping a la dirección publica de google.
+
+Ahora, todo esto no se entiende hasta que no lo vemos en acción, asi que para eso vamos a correr un nuevo comando:\\ \\
+    \texttt{kubectl logs} \\ 
+
+Este comando nos va a mostrar el historial de consola de un pod especifico de un pod si lo pasamos por su nombre; o como alternativa podemos especificar un servicio como los que nos había impreso antes. Como ejemplo vamos a hacer para el deploy: \\ \\
+    \texttt{kubectl logs deploy/pingpong} \\ \\
+
+Vemos que el nombre tiene que ser el formato que uso al imprimirlo en el paso anterior. Ademas vemos que ahora nos imprimió todos los resultados del ping a google como normalmente.
+
+\textbf{Nuestro container esta funcionando!!!}\\
+
+Ahora vamos a comprobar el funcionamiento de nuestro replica set. Para eso vamos a eliminar el pod que esta corriendo actualmente y despues ver que automáticamente es reemplazado. Para eso corremos:\\ \\ 
+    \texttt{kubectl get pods} \\
+
+Entonces vemos nuestro pod con su nombre y lo usamos en el siguiente comando:\\ \\
+    \texttt{kubectl delete pod PODNAME} \\
+
+Eso va a eliminar nuestro pod. Mientras lo elimina podemos darle a ctrl + c para seguir usando la consola y correr nuevamente 'kubectl get pods' para así ver que nuestro pod esta en esta el estado "terminating" o no está, y en su lugar se ha creado un nuevo pod para reemplazarlo.
+
 
 
 \end{document}
