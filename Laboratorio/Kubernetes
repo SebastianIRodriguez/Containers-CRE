@@ -54,4 +54,33 @@ Ahi vamos a poder ver los siguientes servicios:
 
 Ahora, hemos dado un paso adelante para poder ver la jerarquia existente dentro de kubernetes pero nos hemos adelantado tanto que tocamos conceptos desconocidos como deployment y los replica set.
 
-El concepto de replica set es un concepto diseñado para la utilidad de escalabilidad que nos ofrece 
+El concepto de replica set es un concepto diseñado para la utilidad de escalabilidad y confiabilidad que nos ofrece kubernetes. La idea de los replica set es mantener un numero minimo y deseado de pods identicos corriendo para asegurarnos que:
+    - En caso de que uno o mas pods fallen y desaparezcan, el controlador del replica set va a generar nuevas copias para remplazarlos.
+    - En el caso de que querramos escalar la apicacion para recibir mas consultas podemos especificar un mayor numero de replicas o configurarlo para que aumente automaticamente.
+
+El concepto de deployment es el ultimo en la jerarquia de kubernetes y actua orquestando los replica set y los pods con actualizaciones declarativas sobre estos.
+
+Una actualizacion declarativa es algo como 'podria usted mantener 4 replica set ahora mismo'. De esta forma el deployment puede guiar el estado actual de nuestro proyecto hasta el estado deseado de una manera controlada.
+
+Entonces al configurar nosotros nuestro deployment establecemos un estado deseado y el deployment va a hacer todo lo posible por satisfacer esto utilizando una combinacion de controladores.
+
+Volviendo a lo que ibamos, ahora creamos un container dentro de un pod adentro de muchas otras cosas y esencialmente este container le hizo un ping a la direccion publica de google.
+
+Ahora, todo esto no se entiende hasta que no lo vemos en accion, asi que para eso vamos a correr un nuevo comando:
+    kubectl logs 
+
+Este comando nos va a mostrar el historial de consola de un pod especifico de un pod si lo pasamos por su nombre; o como alternativa podemos especificar un servicio como los que nos habia impreso antes. Como ejemplo vamos a hacer para el deploy:
+    kubectl logs deploy/pingpong
+
+Vemos que el nombre tiene que ser el formato que uso al imprimirlo en el paso anterior. Ademas vemos que ahora nos imprimio todos los resultados del ping a google como normalmente.
+
+Nuestro container esta funcionando!!!
+
+Ahora vamos a comprobar el funcionamiento de nuestro replica set. Para eso vamos a eliminar el pod que esta corriendo actualmente y despues ver que automaticamente es reemplazado. Para eso corremos:
+    kubectl get pods
+
+Entonces vemos nuestro pod con su nombre y lo usamos en el siguiente comando:
+    kubectl delete pod PODNAME
+
+Eso va a eliminar nuestro pod. Mientras lo elimina podemos darle a ctrl + c para seguir usando la consola y correr nuevamente 'kubectl get pods' para asi ver que nuestro pod esta en esta el estado terminating o no esta, y en su lugar se ha creado un nuevo pod para reemplazarlo.
+
