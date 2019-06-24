@@ -64,11 +64,14 @@ Esta es una primera aproximación a docker donde primero crearemos un container 
 
 Vamos a correr el comando ls desde un container con alpine que es una distribucion de linux para ver los contenidos de la raiz en el container.
 
-Para eso vamos a correr 'docker container run alpine ls'.
+Para eso vamos a correr:  \\ \\
+	\texttt{docker container run alpine ls} 
+	\\
 
-Ese ultimo comando contiene varias cosas. 'docker' es el comando principal que se escribe para pasarle instrucciones a docker. Una de esas instrucciones es 'container' que permite administrar los containers y dentro de esa instruccion podemos especificar una subinstruccion para administrarlos que es 'run'.
 
-'run' basicamente corre una instruccion en un nuevo container. De esta forma 'run' simultaneamente crea un nuevo contenedor con la imagen que le pasamos como parametro 'alpine' y corre una instruccion que le pasamos como segundo parametro, en este caso 'ls'.
+Ese ultimo comando le indica al administrador de containers de docker que corra un nuevo container utilizando la imagen de una antigua distribucion de linux, llamada alpine.
+
+El ultimo parametro le indica al container que acaba de crear que ejecute el comando ls apenas arrancar y por ultimo devuelve los resultados por consola.
 
 
 Luego de correr este comando vamos a ver que docker bajo la imagen oficial desde la pagina y que creo el container para por ultimo correr el comando ls y mostrar la estructura del directorio en la raiz del container.
@@ -79,7 +82,9 @@ Podemos ver corriendo 'docker container ls --all' que nuestro container sigue vi
 
 Para este ejemplo vamos a correr una sesión de bash desde un container levantado con una imagen de ubuntu. Para eso vamos a utilizar nuevamente el comando 'run' del ejemplo anterior con un par de parámetros extras.
 
-Vamos a correr 'docker container run --interactive --tty --rm ubuntu bash'. 
+Vamos a correr: \\ \\
+	\texttt{docker container run --interactive --tty --rm ubuntu bash}
+	\\ 
 
 Este comando utiliza los parámetros 'interactive', 'tty' y 'rm'. Estos parámetros en orden son:
 \begin{itemize}
@@ -88,7 +93,7 @@ Este comando utiliza los parámetros 'interactive', 'tty' y 'rm'. Estos parámet
     interactive relaciona el input producido desde el teclado del host con la entrada del container para la sesión de bashdocker classroom
     
     \item
-    ity muestra, como estamos acostumbrados, el usuario actual tanto como el directorio haciendolo mas parecido aun a una terminal corriente
+    tty muestra, como estamos acostumbrados, el usuario actual tanto como el directorio haciendolo mas parecido aun a una terminal corriente
     
     \item
     rm elimina el container luego de terminar la sesion. De esta forma no se vera mas al correr 'docker container ls --all'
